@@ -1,6 +1,13 @@
 package Controllers;
 
 import Entities.Cozinha;
+import HibernateUtils.SessionFactoryBuilder;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,17 +21,19 @@ import java.io.PrintWriter;
 /**
  * Created by juane on 05/09/2016.
  */
-@WebServlet("/Cozinha")
+@WebServlet("/Cozinhas")
 public class CozinhaController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String description = request.getParameter("description");
 
         Cozinha novaCozinha = new Cozinha();
         novaCozinha.set_description(description);
+
+        SessionFactoryBuilder.SaveObject(novaCozinha);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher view = request.getRequestDispatcher("EditComodo.jsp");
+        RequestDispatcher view = request.getRequestDispatcher("Views/EditCozinha.jsp");
         view.forward(request, response);
     }
 }

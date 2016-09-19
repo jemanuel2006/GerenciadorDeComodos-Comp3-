@@ -4,12 +4,26 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="connection.url">jdbc:mysql://127.0.0.1:3306</property>
+        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/gerenciadordeambientes</property>
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.username">root</property>
         <property name="connection.password">abc123123</property>
         <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
+        <!-- Use the C3P0 connection pool. -->
+        <property name="c3p0.min_size">3</property>
+        <property name="c3p0.max_size">5</property>
+        <property name="c3p0.timeout">1800</property>
+
+        <property name="current_session_context_class">thread</property>
+        <property name="hibernate.id.new_generator_mappings">false</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <mapping class="Entities.Cozinha" />
+        <mapping class="Entities.Sala" />
+        <mapping class="Entities.Quarto" />
+        <mapping class="Entities.Comodo"/>
+        <mapping class="Entities.ComodoComposto" />
     </session-factory>
 </hibernate-configuration>

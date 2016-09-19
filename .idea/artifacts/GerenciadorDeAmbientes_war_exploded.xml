@@ -6,6 +6,11 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="GerenciadorDeAmbientes" />
+          <element id="library" level="project" name="cdi-api-1.1" />
+          <element id="library" level="project" name="classmate-1.3.0" />
+          <element id="library" level="project" name="Hibernate 5.2.2-5.2.2" />
+          <element id="library" level="project" name="JPA 2.1-2.1" />
+          <element id="library" level="project" name="mysql-connector-java-5.1.39-bin" />
         </element>
       </element>
     </root>
