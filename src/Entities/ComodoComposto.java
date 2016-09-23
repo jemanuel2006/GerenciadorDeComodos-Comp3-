@@ -1,7 +1,7 @@
 package Entities;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -10,6 +10,6 @@ import java.util.Collection;
  */
 @Entity
 public class ComodoComposto extends Comodo {
-    @OneToMany
+    @ManyToMany
     private Collection<Comodo> Composition = new ArrayList<>();
 }

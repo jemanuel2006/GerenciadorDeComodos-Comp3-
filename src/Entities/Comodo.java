@@ -9,13 +9,14 @@ import javax.persistence.*;
 public abstract class Comodo {
     @Id @GeneratedValue(strategy = GenerationType.TABLE)
     private int Id;
-    private String _description;
+    private String Description;
 
-    public String get_description() {
-        return _description;
+    public String getDescription() {
+        return Description;
     }
+    public int getId(){return Id;}
 
-    public void set_description(String _description) {
-        this._description = _description;
+    public void setDescription(String _description) {
+        this.Description = _description;
     }
 }

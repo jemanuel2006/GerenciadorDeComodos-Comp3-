@@ -4,6 +4,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Created by juane on 18/09/2016.
  */
@@ -30,7 +33,36 @@ public class SessionFactoryBuilder {
         SessionFactory factory = SessionFactoryBuilder.getSessionFactory();
         Session session = factory.openSession();
         session.beginTransaction();
-        session.save(obj);
+        session.saveOrUpdate(obj);
         session.getTransaction().commit();
+        session.close();
+    }
+
+    public static Object GetObjectById(Class objType, int id){
+        SessionFactory factory = SessionFactoryBuilder.getSessionFactory();
+        Session session = factory.openSession();
+        session.beginTransaction();
+        Object obj = session.get(objType, id);
+        session.close();
+        return obj;
+    }
+
+    public static List<Object> GetObjects(Class objType){
+        SessionFactory factory = SessionFactoryBuilder.getSessionFactory();
+        Session session = factory.openSession();
+        session.beginTransaction();
+        List objs = session.createQuery("FROM " + objType.getName()).list();
+
+        return objs;
+    }
+
+    public static void DeleteObjectById(Class classType, int id){
+        SessionFactory factory = SessionFactoryBuilder.getSessionFactory();
+        Session session = factory.openSession();
+        session.beginTransaction();
+        Object obj = session.get(classType, id);
+        session.delete(obj);
+        session.getTransaction().commit();
+        session.close();
     }
 }
