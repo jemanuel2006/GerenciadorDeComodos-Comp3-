@@ -19,9 +19,9 @@
         <legend>Criar Quarto</legend>
         <div class="row">
             <form action="/Create/Quarto" method="post">
-                <div class="col-md-5">
+                <div class="col-md-8">
                     <div class="form-group">
-                        <label class="control-label" for="description">Descrição:</label>
+                        <label class="control-label" for="description">* Descrição:</label>
                         <input class="form-control" required name="description" id="description" type="text"/>
                     </div>
                     <button class="btn btn-primary" type="submit">Criar Quarto</button>

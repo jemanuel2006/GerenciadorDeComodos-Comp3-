@@ -79,7 +79,7 @@
                                                 url: "/Delete/Quarto?id=" + item.Id
                                             })
                                             .done(function(data) {
-                                                swal("Quarto apagado!", "O quarto ''" + item.Descrição + "' foi apagada.", "success");
+                                                swal("Quarto apagado!", "O quarto ''" + item.Descrição + "' foi apagado.", "success");
                                                 $("#grid").jsGrid("deleteItem", item);
                                             })
                                             .fail(function() {

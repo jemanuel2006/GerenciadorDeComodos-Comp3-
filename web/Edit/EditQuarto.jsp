@@ -39,9 +39,9 @@
         <div class="row">
             <form action="/Edit/Quarto" method="post">
                 <input name="hfId" id="hfId" type="hidden" value="${hfId}" />
-                <div class="col-md-5">
+                <div class="col-md-8">
                     <div class="form-group">
-                        <label class="control-label" for="description">Descrição:</label>
+                        <label class="control-label" for="description">* Descrição:</label>
                         <input class="form-control" required name="description" id="description" type="text"  value="${description}"/>
                     </div>
                     <button class="btn btn-primary" type="submit">Alterar Quarto</button>

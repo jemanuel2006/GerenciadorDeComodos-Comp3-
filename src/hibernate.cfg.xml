@@ -25,5 +25,6 @@
         <mapping class="Entities.Quarto" />
         <mapping class="Entities.Comodo"/>
         <mapping class="Entities.ComodoComposto" />
+        <mapping class="Entities.Mobilia" />
     </session-factory>
 </hibernate-configuration>

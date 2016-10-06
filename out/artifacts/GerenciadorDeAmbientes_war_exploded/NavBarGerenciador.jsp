@@ -34,12 +34,8 @@
                         </li>
                         <li class="col-sm-4">
                             <ul>
-                                <li class="dropdown-header">Gerenciar Mobílias de um Cômodo</li>
-                                <li><a href="#">Cozinha</a></li>
-                                <li><a href="#">Sala</a></li>
-                                <li><a href="#">Quarto</a></li>
-                                <li><a href="#">Cômodo Composto</a></li>
-                                <li><a href="#">Criar nova Mobília</a></li>
+                                <li class="dropdown-header">Mobílias</li>
+                                <li><a href="/List/Mobilia">Gerenciar Mobílias</a></li>
                             </ul>
                         </li>
                         <li class="col-sm-4">
