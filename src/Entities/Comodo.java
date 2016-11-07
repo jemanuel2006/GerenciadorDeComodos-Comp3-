@@ -8,9 +8,7 @@ import java.util.Set;
 /**
  * Created by juane on 05/09/2016.
  */
-@Entity @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Comodo {
-    @Id @GeneratedValue(strategy = GenerationType.TABLE)
     private int Id;
     private String Description;
 
@@ -19,12 +17,14 @@ public abstract class Comodo {
     }
     public int getId(){return Id;}
 
+    public void setId(int id) {
+        Id = id;
+    }
+
     public void setDescription(String _description) {
         this.Description = _description;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="comodo_mobilia", joinColumns=@JoinColumn(name="comodoId"), inverseJoinColumns=@JoinColumn(name="mobiliaId"))
     protected Set<Mobilia> ListaMobilias = new HashSet<>();
 
     public Set<Mobilia> getListaMobilias() {
@@ -36,6 +36,35 @@ public abstract class Comodo {
     }
 
     public void AddMobilia(Mobilia mobilia){
+        if(ContainsMobilia(mobilia.getId()) == true)
+            return;
+
         this.ListaMobilias.add(mobilia);
+    }
+
+    public void RemoveMobilia(Mobilia mobilia){
+        ListaMobilias.removeIf(m -> m.getId() == mobilia.getId());
+    }
+
+    public boolean ContainsMobilia(int id){
+        for (Mobilia mobilia : ListaMobilias) {
+            if(mobilia.getId() == id)
+                return true;
+        }
+
+        return false;
+    }
+
+    public Mobilia GetMobiliaById(int id){
+        for (Mobilia mobilia : ListaMobilias) {
+            if(mobilia.getId() == id)
+                return mobilia;
+        }
+
+        return null;
+    }
+
+    public boolean HasMobilia(){
+        return ListaMobilias.size() > 0;
     }
 }

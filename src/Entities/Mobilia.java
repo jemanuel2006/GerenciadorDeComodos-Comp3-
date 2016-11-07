@@ -1,18 +1,26 @@
 package Entities;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
  * Created by juane on 23/09/2016.
  */
-@Entity
+
 public class Mobilia {
-    @Id
     private int Id;
     private float Cost;
     private String Description;
     private int DeliveryTime;
+
+    public Mobilia(int id, String description, int deliveryTime, float cost){
+        this.Id = id;
+        this.Description = description;
+        this.DeliveryTime = deliveryTime;
+        this.Cost = cost;
+    }
 
     public int getId() {
         return Id;

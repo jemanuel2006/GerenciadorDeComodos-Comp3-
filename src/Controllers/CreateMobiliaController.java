@@ -3,6 +3,8 @@ package Controllers;
 import Entities.Comodo;
 import Entities.Mobilia;
 import HibernateUtils.SessionFactoryBuilder;
+import TransactionScripts.ComodoTransactions;
+import TransactionScripts.MobiliaTransactions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,42 +34,41 @@ public class CreateMobiliaController extends HttpServlet {
         ArrayList<Integer> ids = new ArrayList<>();
 
         for(String id : stringIds){
-            ids.add(Integer.parseInt(id));
+            if (id != null && id.isEmpty() == false) {
+                ids.add(Integer.parseInt(id));
+            }
         }
 
-        Mobilia novaMobilia = new Mobilia();
-        novaMobilia.setDescription(description);
-        novaMobilia.setCost(cost);
-        novaMobilia.setDeliveryTime(deliveryTime);
+        try {
+            Mobilia novaMobilia = MobiliaTransactions.CreateMobilia(description, deliveryTime, cost, ids);
 
-        SessionFactoryBuilder.SaveObject(novaMobilia);
+            request.getSession().setAttribute("success", true);
+            request.getSession().setAttribute("message", "Mobilia criada com sucesso.");
 
-        for(int id : ids){
-            Comodo comodo = (Comodo)SessionFactoryBuilder.GetObjectById(Comodo.class, id);
-            comodo.AddMobilia(novaMobilia);
-            SessionFactoryBuilder.SaveObject(comodo);
+            response.sendRedirect("/Edit/Mobilia?id=" + novaMobilia.getId());
+        } catch (Exception e) {
+            request.getSession().setAttribute("error", "Ocorreu um erro ao criar a mobilia.");
+            response.sendRedirect("/Create/Mobilia");
         }
-
-        request.getSession().setAttribute("success", true);
-        request.getSession().setAttribute("message", "Mobilia criada com sucesso.");
-
-        response.sendRedirect("/Edit/Mobilia?id=" + novaMobilia.getId());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        JSONArray comodos = GetComodosArray();
-        request.setAttribute("Comodos", comodos);
+        try {
+            JSONArray comodos = GetComodosArray();
+            request.setAttribute("Comodos", comodos);
+        } catch (Exception e) {
+            request.setAttribute("Comodos", new JSONArray());
+            request.setAttribute("error", "Ocorreu um erro ao carregar a lista de comodos.");
+        }
 
         RequestDispatcher view = request.getRequestDispatcher("CreateMobilia.jsp");
         view.forward(request, response);
     }
 
-    private JSONArray GetComodosArray() {
+    private JSONArray GetComodosArray() throws Exception {
         JSONArray array = new JSONArray();
 
-        for (Iterator it = SessionFactoryBuilder.GetObjects(Comodo.class).iterator();
-             it.hasNext();){
-            Comodo comodo = (Comodo) it.next();
+        for (Comodo comodo : ComodoTransactions.GetAllComodos()){
             JSONObject obj = new JSONObject();
 
             obj.put("Id", comodo.getId());

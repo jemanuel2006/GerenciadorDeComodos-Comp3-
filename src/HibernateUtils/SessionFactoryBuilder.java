@@ -52,6 +52,7 @@ public class SessionFactoryBuilder {
         Session session = factory.openSession();
         session.beginTransaction();
         List objs = session.createQuery("FROM " + objType.getName()).list();
+        session.close();
 
         return objs;
     }

@@ -29,7 +29,7 @@
                                 <li><a href="/List/Cozinha">Cozinhas</a></li>
                                 <li><a href="/List/Sala">Salas</a></li>
                                 <li><a href="/List/Quarto">Quartos</a></li>
-                                <li><a href="#">Cômodos Compostos</a></li>
+                                <li><a href="/List/ComodoComposto">Cômodos Compostos</a></li>
                             </ul>
                         </li>
                         <li class="col-sm-4">

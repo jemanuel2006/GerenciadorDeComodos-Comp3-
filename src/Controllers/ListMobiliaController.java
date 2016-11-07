@@ -2,6 +2,7 @@ package Controllers;
 
 import Entities.Mobilia;
 import HibernateUtils.SessionFactoryBuilder;
+import TransactionScripts.MobiliaTransactions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,7 +22,14 @@ import java.util.Iterator;
 public class ListMobiliaController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("basePath", GetServerBasePath(request));
-        request.setAttribute("list", GetMobilias());
+
+        try {
+            request.setAttribute("list", GetMobilias());
+        } catch (Exception e) {
+            request.setAttribute("error", "Ocorreu um erro ao carregar a lista de mobilias.");
+            request.setAttribute("list", new JSONArray());
+        }
+
         RequestDispatcher view = request.getRequestDispatcher("ListMobilia.jsp");
         view.forward(request, response);
     }
@@ -31,12 +39,10 @@ public class ListMobiliaController extends HttpServlet {
         return requestUrl.substring(0, requestUrl.indexOf(request.getServletPath()));
     }
 
-    private JSONArray GetMobilias(){
+    private JSONArray GetMobilias() throws Exception{
         JSONArray array = new JSONArray();
 
-        for (Iterator it = SessionFactoryBuilder.GetObjects(Mobilia.class).iterator();
-             it.hasNext();){
-            Mobilia mobilia = (Mobilia) it.next();
+        for (Mobilia mobilia : MobiliaTransactions.GetMobilias()){
             JSONObject obj = new JSONObject();
 
             obj.put("Id", mobilia.getId());

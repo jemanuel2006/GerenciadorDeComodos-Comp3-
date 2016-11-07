@@ -2,6 +2,7 @@ package Controllers;
 
 import Entities.Sala;
 import HibernateUtils.SessionFactoryBuilder;
+import TransactionScripts.ComodoTransactions;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,16 +19,17 @@ import java.io.IOException;
 public class CreateSalaController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String description = request.getParameter("description");
+        try {
+            Sala novaSala = ComodoTransactions.CreateComodo(Sala.class, description);
+            request.getSession().setAttribute("success", true);
+            request.getSession().setAttribute("message", "Sala criada com sucesso.");
 
-        Sala novaSala = new Sala();
-        novaSala.setDescription(description);
-
-        SessionFactoryBuilder.SaveObject(novaSala);
-
-        request.getSession().setAttribute("success", true);
-        request.getSession().setAttribute("message", "Sala criada com sucesso.");
-
-        response.sendRedirect("/Edit/Sala?id=" + novaSala.getId());
+            response.sendRedirect("/Edit/Sala?id=" + novaSala.getId());
+        } catch (Exception e){
+            request.getSession().setAttribute("success", false);
+            request.getSession().setAttribute("message", "Ocorreu um erro ao criar a sala.");
+            response.sendRedirect("/Create/Sala");
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

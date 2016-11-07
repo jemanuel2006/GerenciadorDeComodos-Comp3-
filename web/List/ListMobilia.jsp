@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Cozinhas Disponíveis</title>
+    <title>Mobílias Disponíveis</title>
     <link rel="stylesheet" type="text/css" href="../www/boostrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../www/jsgrid-1.5.2/dist/jsgrid.min.css">
     <link rel="stylesheet" type="text/css" href="../www/jsgrid-1.5.2/dist/jsgrid-theme.min.css">
@@ -56,6 +56,8 @@
                 },
                 { name: "Id", type: "number", width: 35 },
                 { name: "Descrição", type: "text", width: 225, validate: "required" },
+                { name: "Custo", type: "number", width: 35, validate: "required" },
+                { name: "Tempo", type: "number", width: 35, validate: "required" },
                 {
                     type: "control",
                     width: 35,

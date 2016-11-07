@@ -2,6 +2,7 @@ package Controllers;
 
 import Entities.Cozinha;
 import HibernateUtils.SessionFactoryBuilder;
+import TransactionScripts.ComodoTransactions;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,16 +19,16 @@ import java.io.IOException;
 public class CreateCozinhaController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String description = request.getParameter("description");
-
-        Cozinha novaCozinha = new Cozinha();
-        novaCozinha.setDescription(description);
-
-        SessionFactoryBuilder.SaveObject(novaCozinha);
-
-        request.getSession().setAttribute("success", true);
-        request.getSession().setAttribute("message", "Cozinha criada com sucesso.");
-
-        response.sendRedirect("/Edit/Cozinha?id=" + novaCozinha.getId());
+        try {
+            Cozinha novaCozinha = ComodoTransactions.CreateComodo(Cozinha.class, description);
+            request.getSession().setAttribute("success", true);
+            request.getSession().setAttribute("message", "Cozinha criada com sucesso.");
+            response.sendRedirect("/Edit/Cozinha?id=" + novaCozinha.getId());
+        } catch (Exception e) {
+            request.getSession().setAttribute("success", false);
+            request.getSession().setAttribute("message", "Ocorreu um erro ao criar a cozinha.");
+            response.sendRedirect("/Create/Cozinha");
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,8 +1,7 @@
 package Controllers;
 
-import Entities.Cozinha;
 import Entities.Sala;
-import HibernateUtils.SessionFactoryBuilder;
+import TransactionScripts.ComodoTransactions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Iterator;
 
 /**
  * Created by juane on 19/09/2016.
@@ -22,7 +20,13 @@ import java.util.Iterator;
 public class ListSalaController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("basePath", GetServerBasePath(request));
-        request.setAttribute("list", GetSalas());
+        //Colocar mensagem de erro na tela
+        try {
+            request.setAttribute("list", GetSalas());
+        } catch (Exception e){
+            request.setAttribute("list", new JSONArray());
+        }
+
         RequestDispatcher view = request.getRequestDispatcher("ListSala.jsp");
         view.forward(request, response);
     }
@@ -32,12 +36,10 @@ public class ListSalaController extends HttpServlet {
         return requestUrl.substring(0, requestUrl.indexOf(request.getServletPath()));
     }
 
-    private JSONArray GetSalas(){
+    private JSONArray GetSalas() throws Exception{
         JSONArray array = new JSONArray();
 
-        for (Iterator it = SessionFactoryBuilder.GetObjects(Sala.class).iterator();
-             it.hasNext();){
-            Sala sala = (Sala) it.next();
+        for (Sala sala : ComodoTransactions.GetComodos(Sala.class)){
             JSONObject obj = new JSONObject();
 
             obj.put("Id", sala.getId());

@@ -2,6 +2,7 @@ package Controllers;
 
 import Entities.Cozinha;
 import HibernateUtils.SessionFactoryBuilder;
+import TransactionScripts.ComodoTransactions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,7 +22,11 @@ import java.util.Iterator;
 public class ListCozinhaController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("basePath", GetServerBasePath(request));
-        request.setAttribute("list", GetCozinhas());
+        try {
+            request.setAttribute("list", GetCozinhas());
+        } catch (Exception e) {
+            request.setAttribute("error", "Ocorreu um erro ao carregar a lista de cozinhas.");
+        }
         RequestDispatcher view = request.getRequestDispatcher("ListCozinha.jsp");
         view.forward(request, response);
     }
@@ -31,12 +36,10 @@ public class ListCozinhaController extends HttpServlet {
         return requestUrl.substring(0, requestUrl.indexOf(request.getServletPath()));
     }
 
-    private JSONArray GetCozinhas(){
+    private JSONArray GetCozinhas() throws Exception{
         JSONArray array = new JSONArray();
 
-        for (Iterator it = SessionFactoryBuilder.GetObjects(Cozinha.class).iterator();
-                it.hasNext();){
-            Cozinha cozinha = (Cozinha) it.next();
+        for (Cozinha cozinha : ComodoTransactions.GetComodos(Cozinha.class)){
             JSONObject obj = new JSONObject();
 
             obj.put("Id", cozinha.getId());

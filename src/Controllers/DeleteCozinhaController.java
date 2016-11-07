@@ -2,6 +2,7 @@ package Controllers;
 
 import Entities.Cozinha;
 import HibernateUtils.SessionFactoryBuilder;
+import TransactionScripts.ComodoTransactions;
 import Utils.QueryStringHelper;
 
 import javax.servlet.ServletException;
@@ -20,7 +21,11 @@ public class DeleteCozinhaController extends HttpServlet {
     public void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         Map atts = QueryStringHelper.getQueryMap(request.getQueryString());
         int id = Integer.parseInt(atts.get("id").toString());
-        SessionFactoryBuilder.DeleteObjectById(Cozinha.class, id);
-        response.getWriter().write("Ok!");
+        try {
+            ComodoTransactions.DeleteComodo(Cozinha.class, id);
+            response.getWriter().write("Ok!");
+        } catch (Exception e) {
+            response.sendError(500);
+        }
     }
 }

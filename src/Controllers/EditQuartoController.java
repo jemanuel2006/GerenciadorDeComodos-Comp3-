@@ -1,7 +1,9 @@
 package Controllers;
 
+import Entities.Comodo;
 import Entities.Quarto;
 import HibernateUtils.SessionFactoryBuilder;
+import TransactionScripts.ComodoTransactions;
 import Utils.QueryStringHelper;
 
 import javax.servlet.RequestDispatcher;
@@ -22,13 +24,14 @@ public class EditQuartoController extends HttpServlet {
         String description = request.getParameter("description");
         int id = Integer.parseInt(request.getParameter("hfId"));
 
-        Quarto quarto = (Quarto)SessionFactoryBuilder.GetObjectById(Quarto.class,id);
-        quarto.setDescription(description);
-
-        SessionFactoryBuilder.SaveObject(quarto);
-
-        request.getSession().setAttribute("success", true);
-        request.getSession().setAttribute("message", "Sala atualizada com sucesso.");
+        try {
+            ComodoTransactions.UpdateComodo(Quarto.class, id,description);
+            request.getSession().setAttribute("success", true);
+            request.getSession().setAttribute("message", "Sala atualizada com sucesso.");
+        } catch (Exception e) {
+            request.getSession().setAttribute("success", false);
+            request.getSession().setAttribute("message", "Ocorreu um erro ao atualizar o quarto.");
+        }
 
         response.sendRedirect("/Edit/Quarto?id=" + id);
     }
@@ -36,10 +39,14 @@ public class EditQuartoController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Map<String,String> params = QueryStringHelper.getQueryMap(request.getQueryString());
         int id = Integer.parseInt(params.get("id"));
-        Quarto quarto = (Quarto)SessionFactoryBuilder.GetObjectById(Quarto.class, id);
 
-        request.setAttribute("hfId", id);
-        request.setAttribute("description", quarto.getDescription());
+        try {
+            Quarto quarto = ComodoTransactions.GetComodo(Quarto.class, id);
+            request.setAttribute("hfId", id);
+            request.setAttribute("description", quarto.getDescription());
+        } catch (Exception e) {
+            request.setAttribute("error", "Ocorreu um erro ao carregar o quarto.");
+        }
 
         RequestDispatcher view = request.getRequestDispatcher("EditQuarto.jsp");
         view.forward(request, response);

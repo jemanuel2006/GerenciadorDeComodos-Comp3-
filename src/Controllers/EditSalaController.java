@@ -2,6 +2,7 @@ package Controllers;
 
 import Entities.Sala;
 import HibernateUtils.SessionFactoryBuilder;
+import TransactionScripts.ComodoTransactions;
 import Utils.QueryStringHelper;
 
 import javax.servlet.RequestDispatcher;
@@ -22,13 +23,14 @@ public class EditSalaController extends HttpServlet {
         String description = request.getParameter("description");
         int id = Integer.parseInt(request.getParameter("hfId"));
 
-        Sala sala = (Sala)SessionFactoryBuilder.GetObjectById(Sala.class,id);
-        sala.setDescription(description);
-
-        SessionFactoryBuilder.SaveObject(sala);;
-
-        request.getSession().setAttribute("success", true);
-        request.getSession().setAttribute("message", "Sala alterada com sucesso.");
+        try {
+            ComodoTransactions.UpdateComodo(Sala.class, id, description);
+            request.getSession().setAttribute("success", true);
+            request.getSession().setAttribute("message", "Sala alterada com sucesso.");
+        } catch (Exception e){
+            request.getSession().setAttribute("success", false);
+            request.getSession().setAttribute("message", "Ocorreu um erro ao alterar a sala.");
+        }
 
         response.sendRedirect("/Edit/Sala?id=" + id);
     }
@@ -36,7 +38,12 @@ public class EditSalaController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Map<String,String> params = QueryStringHelper.getQueryMap(request.getQueryString());
         int id = Integer.parseInt(params.get("id"));
-        Sala sala = (Sala)SessionFactoryBuilder.GetObjectById(Sala.class, id);
+        Sala sala = null;
+        try {
+            sala = ComodoTransactions.GetComodo(Sala.class, id);
+        } catch (Exception e){
+
+        }
 
         request.setAttribute("hfId", id);
         request.setAttribute("description", sala.getDescription());
